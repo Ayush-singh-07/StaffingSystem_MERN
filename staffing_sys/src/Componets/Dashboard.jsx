@@ -16,14 +16,13 @@ function Dashboard(){
         .catch(err => console.log(err))
         }, [])
 
-        const downloadAsPDF = (dataBuffer) => {
-            const blob = new Blob([dataBuffer], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
+        const downloadAsPDF = (dataBuffer, name) => {
+            const url = window.URL.createObjectURL(new Blob([new Uint8Array(dataBuffer).buffer]));
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'file.pdf';
+            link.setAttribute('download', name+'.pdf');
+            document.body.appendChild(link);
             link.click();
-            URL.revokeObjectURL(url);
           };
 
     console.log(Alldata);
@@ -46,7 +45,7 @@ function Dashboard(){
                             return <tr>
                                         <td className="pv3 pr3 bb b--black-20">{elem.name}</td>
                                         <td className="pv3 pr3 bb b--black-20">
-                                            <button onClick={() => downloadAsPDF(elem.file.data.data)}>Download PDF</button>
+                                            <button onClick={() => downloadAsPDF(elem.file.data.data, elem.name)}>Download PDF</button>
                                         </td>
                                         {/* <td>{elem.file.data.data}</td> */}
                                         <td className="pv3 pr3 bb b--black-20">{elem.tech}</td>
